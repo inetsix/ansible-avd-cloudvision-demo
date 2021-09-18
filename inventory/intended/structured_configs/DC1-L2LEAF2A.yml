@@ -1,88 +1,34 @@
-## Ansible Generated ##
-
-### DC1-L2LEAF2A ###
-
-
-### Leaf Info ###
-l2leaf_node_group: DC1_L2LEAF2
-switch_platform: vEOS-LAB
-leaf_id: 7
-switch_mgmt_ip: 10.255.0.18/24
-leaf_filter_tenants: ['Tenant_A']
-leaf_filter_tags: ['opzone', 'web', 'app']
-leaf_allowed_vrfs: ['Tenant_A_APP_Zone', 'Tenant_A_OP_Zone', 'Tenant_A_WEB_Zone']
-leaf_allowed_svis: [130, 131, 110, 111, 112, 120, 121]
-leaf_allowed_vlans: [130, 131, 110, 111, 112, 120, 121]
-leaf_mlag: False
-
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 10.255.0.1
 service_routing_protocols_model: multi-agent
 ip_routing: true
-
-### Hardware Counter
-hardware_counters:
-
-### Daemon TerminAttr
 daemon_terminattr:
-  ingestgrpcurl:
-    ips:
-      - 10.255.0.1
-    port: 9910
-  ingestauth_key: 
-  ingestvrf: MGMT
-  smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
-  ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
-
+  cvaddrs:
+  - 10.255.0.1:9910
+  cvauth:
+    method: key
+  cvvrf: MGMT
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
 vlan_internal_order:
   allocation: ascending
   range:
     beginning: 1006
     ending: 1199
-
-### Event Monitor ###
-event_monitor:
-
-### Event Handler ###
-event_handlers:
-
-### Load Interval ###
-load_interval:
-
-### Queue Monitor Lenght ###
-queue_monitor_length:
-
-### Logging ###
-logging:
-
-### Name Servers ###
 name_server:
   source:
     vrf: MGMT
   nodes:
-    - 192.168.2.1
-    - 8.8.8.8
-
-### NTP Servers ###
-ntp_server:
-  local_interface:
-    vrf: MGMT
-    interface: Management1
-  nodes:
-    - 0.fr.pool.ntp.org
-    - 1.fr.pool.ntp.org
-
-### Redundancy ###
-redundancy:
-
-### Spanning-tree ###
+  - 192.168.2.1
+  - 8.8.8.8
 spanning_tree:
   mode: mstp
-  priority: 16384
-
-
-### AAA authorization ###
-aaa_authorization:
-
-### local users ###
+  mst_instances:
+    '0':
+      priority: 16384
 local_users:
   admin:
     privilege: 15
@@ -96,14 +42,59 @@ local_users:
     privilege: 15
     role: network-admin
     sha512_password: $6$rZKcbIZ7iWGAWTUM$TCgDn1KcavS0s.OV8lacMTUkxTByfzcGlFlYUWroxYuU7M/9bIodhRO7nXGzMweUxvbk8mJmQl8Bh44cRktUj.
-
-### Clock Timezone ###
-clock:
-
-### VLANs ###
+vrfs:
+  MGMT:
+    ip_routing: false
+management_interfaces:
+  Management1:
+    description: oob_management
+    shutdown: false
+    vrf: MGMT
+    ip_address: 10.255.0.18/24
+    gateway: 10.255.0.1
+    type: oob
+management_api_http:
+  enable_vrfs:
+    MGMT: {}
+  enable_https: true
+ethernet_interfaces:
+  Ethernet1:
+    peer: DC1-LEAF2A
+    peer_interface: Ethernet5
+    peer_type: l3leaf
+    description: DC1-LEAF2A_Ethernet5
+    type: switched
+    shutdown: false
+    channel_group:
+      id: 1
+      mode: active
+  Ethernet2:
+    peer: DC1-LEAF2B
+    peer_interface: Ethernet5
+    peer_type: l3leaf
+    description: DC1-LEAF2B_Ethernet5
+    type: switched
+    shutdown: false
+    channel_group:
+      id: 1
+      mode: active
+  Ethernet5:
+    peer: server02
+    peer_interface: Eth0
+    peer_type: server
+    description: server02_Eth0
+    type: switched
+    shutdown: false
+    mode: access
+    vlans: 110
+port_channel_interfaces:
+  Port-Channel1:
+    description: DC1_LEAF2_Po5
+    type: switched
+    shutdown: false
+    vlans: 110-112,120-121,130-131
+    mode: trunk
 vlans:
-
-## Tenant_A ##
   130:
     tenant: Tenant_A
     name: Tenant_A_APP_Zone_1
@@ -125,77 +116,15 @@ vlans:
   121:
     tenant: Tenant_A
     name: Tenant_A_WEBZone_2
-
-### VRFs ###
-vrfs:
-  MGMT:
-    ip_routing: False
-### Port-Channel Interfaces ###
-port_channel_interfaces:
-  Port-Channel1:
-    description: DC1-LEAF2A_Po5
-    vlans: 110-112,120-121,130-131
-    mode: trunk
-    mlag: 1
-
-### Ethernet Interfaces ###
-ethernet_interfaces:
-## L3 LEAF link ##
-  Ethernet1:
-    peer: DC1-LEAF2A
-    peer_interface: Ethernet5
-    peer_type: l3leaf
-    description: DC1-LEAF2A_Ethernet5
-    channel_group:
-      id: 1
-      mode: active
-## L3 LEAF link ##
-  Ethernet2:
-    peer: DC1-LEAF2B
-    peer_interface: Ethernet5
-    peer_type: l3leaf
-    description: DC1-LEAF2B_Ethernet5
-    channel_group:
-      id: 1
-      mode: active
-  Ethernet5:
-    peer: server02
-    peer_interface: Eth0
-    peer_type: server
-    description: server02_Eth0
-    mode: access
-    vlans: 110
-    profile: TENANT_A
-
-### Management Interfaces ###
-management_interfaces:
-  Management1:
-    description: oob_management
+ip_igmp_snooping:
+  globally_enabled: true
+ntp:
+  local_interface:
+    name: Management1
     vrf: MGMT
-    ip_address: 10.255.0.18/24
-    gateway: 10.255.0.1
-
-### VLAN Interfaces ###
-vlan_interfaces:
-
-### TCAM Profiles ###
-tcam_profile:
-
-### MAC address table ###
-mac_address_table:
-
-### static routes ###
-static_routes:
-  - vrf: MGMT
-    destination_address_prefix: 0.0.0.0/0
-    gateway: 10.255.0.1
-
-
-### Queue Monitor Streaming ###
-queue_monitor_streaming:
-
-### Management API http ###
-management_api_http:
-  enable_https: True
-  enable_vrfs:
-    MGMT:
+  servers:
+  - name: 0.fr.pool.ntp.org
+    preferred: true
+    vrf: MGMT
+  - name: 1.fr.pool.ntp.org
+    vrf: MGMT

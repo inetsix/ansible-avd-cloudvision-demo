@@ -23,6 +23,8 @@ cvp_ingestauth_key: ''
 # cvp_ingestauth_key: telarista
 
 # OOB Management network default gateway.
+mgmt_interface: Management1
+mgmt_interface_vrf: MGMT
 mgmt_gateway: 10.255.0.1
 
 # dns servers.
@@ -31,6 +33,13 @@ name_servers:
   - 8.8.8.8
 
 # NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Managment VRF
-ntp_servers:
-  - 0.fr.pool.ntp.org
-  - 1.fr.pool.ntp.org
+custom_structured_configuration_ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+  - name: 0.fr.pool.ntp.org
+    preferred: true
+    vrf: MGMT
+  - name: 1.fr.pool.ntp.org
+    vrf: MGMT
