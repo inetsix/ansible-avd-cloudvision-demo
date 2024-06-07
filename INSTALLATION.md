@@ -25,7 +25,7 @@ This document explain how to customize demo information and how to setup this en
 - A network topology:
     - Demo is based on a 2 spines / 4 leafs running on GNS3
     - Any physical or virtual topology with oob connected to CVP should work.
-- A python environmentwith CloudVision access.
+- A python environment with CloudVision access.
 
 ![Lab Topology](data/lab-topology.png)
 
@@ -77,13 +77,15 @@ $ docker run --rm -it \
 #  Makefile approach
 $ make install
 #  Manual installation
-$ ansible-galaxy collection install arista.avd:==2.0.0
-$ ansible-galaxy collection install arista.cvp:==2.1.2
+$ ansible-galaxy collection install arista.avd:==4.8.0
+$ ansible-galaxy collection install arista.cvp:==3.10.0
 ```
 
 ## Configure DHCP server on CloudVision
 
 In this scenario, we use CloudVision (CV) as ZTP server to provision devices and register them onto CV.
+
+>Note: This is useful in a lab setting, but this is not a TAC supported configuration.
 
 Once you get mac-address of your switches, edit file `/etc/dhcp/dhcpd.conf` in CloudVision. In this scenario, CV use following address to connect to devices: `10.255.0.1`
 
@@ -288,6 +290,6 @@ You must use same user on CVP and EOS for the demo.
 
 ```yaml
 # Cloud Vision server information
-cvp_instance_ip: 10.255.0.1
-cvp_ingestauth_key: ''
+cvp_instance_ips:
+  - 10.255.0.1
 ```

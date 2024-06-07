@@ -16,11 +16,11 @@ ztp:
         end: 10.255.0.250
         lease_time: 300
   clients:
-  # GNS3 VM Request
+    # GNS3 VM Request
     - name: gns3
       mac: '00:50:56:86:8b:2f'
       ip4: 10.255.0.2
-  # AVD/CVP Integration
+    # AVD/CVP Integration
     - name: DC1-SPINE1
       mac: '0c:1d:c0:1d:62:01'
       ip4: 10.255.0.11
