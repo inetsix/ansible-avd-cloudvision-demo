@@ -1,0 +1,24 @@
+---
+# Tenant C Specific Information - VRFs / VLANs
+Tenant_C:
+  - name: Tenant_C
+    mac_vrf_vni_base: 30000
+    vrfs:
+      - name: Tenant_C_OP_Zone
+        vrf_vni: 30
+        svis:
+          - id: 310
+            name: Tenant_C_OP_Zone_1
+            tags: [opzone]
+            enabled: true
+          - id: 311
+            name: Tenant_C_OP_Zone_2
+            tags: [opzone]
+            enabled: true
+      - name: Tenant_C_WAN_Zone
+        vrf_vni: 31
+        svis:
+          - id: 350
+            name: Tenant_C_WAN_Zone_1
+            tags: [wan]
+            enabled: true

@@ -18,8 +18,14 @@ local_users:
     sha512_password: "$6$Dzu11L7yp9j3nCM9$FSptxMPyIL555OMO.ldnjDXgwZmrfMYwHSr0uznE5Qoqvd9a6UdjiFcJUhGLtvXVZR1r.A/iF5aAt50hf/EK4/"
 
 # Cloud Vision server information
-cvp_instance_ip: 10.255.0.1
-cvp_ingestauth_key: ''
+cvp_instance_ips:
+  - 10.255.0.1
+
+# use token based auth instead
+
+# If not set, TerminAttr will be configured with certificate based authentication:
+# - On-premise using token onboarding. Default token path is '/tmp/token'.
+# - CVaaS using token-secure onboarding. Default token path is '/tmp/cv-onboarding-token'.
 # cvp_ingestauth_key: telarista
 
 # OOB Management network default gateway.
@@ -28,9 +34,11 @@ mgmt_interface_vrf: MGMT
 mgmt_gateway: 10.255.0.1
 
 # dns servers.
-name_servers:
-  - 192.168.2.1
-  - 8.8.8.8
+ip_name_servers:
+  - ip_address: 192.168.2.1
+    vrf: MGMT
+  - ip_address: 8.8.8.8
+    vrf: MGMT
 
 # NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Managment VRF
 custom_structured_configuration_ntp:
@@ -38,8 +46,8 @@ custom_structured_configuration_ntp:
     name: Management1
     vrf: MGMT
   servers:
-  - name: 0.fr.pool.ntp.org
-    preferred: true
-    vrf: MGMT
-  - name: 1.fr.pool.ntp.org
-    vrf: MGMT
+    - name: 0.fr.pool.ntp.org
+      preferred: true
+      vrf: MGMT
+    - name: 1.fr.pool.ntp.org
+      vrf: MGMT

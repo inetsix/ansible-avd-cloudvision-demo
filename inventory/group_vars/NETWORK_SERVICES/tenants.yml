@@ -1,0 +1,5 @@
+---
+network_services_keys:
+  - name: Tenant_A
+  - name: Tenant_B
+  - name: Tenant_C

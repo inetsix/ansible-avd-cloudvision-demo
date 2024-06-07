@@ -5,4 +5,4 @@
   tasks:
   - name: 'Execute ZTP configuration role'
     import_role:
-      name: arista.cvp.dhcp_configuration
+      name: arista.avd.dhcp_provisioner
